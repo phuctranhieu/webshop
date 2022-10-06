@@ -43,6 +43,12 @@ public class Category {
 	@Override
 	public String toString() {
 		return "Category [id=" + id + ", name=" + name + "]";
+	}
+
+
+	public Object getNameCategory() {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 	
 }

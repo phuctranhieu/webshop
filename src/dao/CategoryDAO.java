@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import database.JDBCUtil;
 import model.Category;
+import model.Product;
 
 
 public class CategoryDAO implements DAOinterface<Category>{
@@ -87,20 +88,104 @@ public class CategoryDAO implements DAOinterface<Category>{
 
 	@Override
 	public int delete(Category ca) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+		try {
+			// Bước 1: Tạo kết nối đến CSDL
+			Connection con = JDBCUtil.getConnection();
+			
+			//Bước 2: Tạo ra đối tượng statement
+			Statement st = con.createStatement();
+			
+			//Bước 3: Thực thi câu lệnh SQL
+			String sql = "DELETE from category "+
+					 " SET " +
+					 " WHERE id='"+ca.getId()+"'";
+			System.out.println(sql);
+				 result = st.executeUpdate(sql);
+					
+				
+				//Bước 4:
+				System.out.println("You have execute: "+ sql);
+				System.out.println("Got "+ result+" category changed!");
+
+				// Bước 5: 
+				JDBCUtil.closeConnection(con);
+				
+				
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 
 	@Override
 	public ArrayList<Category> selectAll() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Category> result = new ArrayList<Category>();
+		try {
+			// Bước 1: tạo kết nối đến CSDL
+			Connection con = JDBCUtil.getConnection();
+			
+			// Bước 2: tạo ra đối tượng statement
+			Statement st = con.createStatement();
+			
+			// Bước 3: thực thi câu lệnh SQL
+			
+			String sql = "SELECT * FROM category";
+			System.out.println(sql);
+			ResultSet rs = st.executeQuery(sql);
+			
+			// Bước 4:
+			while(rs.next()) {
+				int id = rs.getInt("id");
+				String name = rs.getString("name");
+				
+				Category category = new Category(id, name);
+				result.add(category);
+			}
+			
+			// Bước 5:
+			JDBCUtil.closeConnection(con);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 
 	@Override
 	public Category selectById(Category ca) {
-		// TODO Auto-generated method stub
-		return null;
+		Category result = null;
+		try {
+			// Bước 1: tạo kết nối đến CSDL
+			Connection con = JDBCUtil.getConnection();
+			
+			// Bước 2: tạo ra đối tượng statement
+			Statement st = con.createStatement();
+			
+			// Bước 3: thực thi câu lệnh SQL
+			
+			String sql = "SELECT * FROM category where id='"+ca.getId()+"'";
+			System.out.println(sql);
+			ResultSet rs = st.executeQuery(sql);
+			
+			// Bước 4:
+			while(rs.next()) {
+				int id = rs.getInt("id");
+				String name = rs.getString("name");
+				
+				result = new Category(id, name);
+			}
+			
+			// Bước 5:
+			JDBCUtil.closeConnection(con);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Override
